@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <script src="../src/css-parser.js"></script>
+    <script src="../src/css-compare.js"></script>
+</head>
+<body>
+    
+    <form action="javascript:main()">
+        <textarea type="text" id="text" style="width:400px; height:100px;" ></textarea><br/>
+        <input type="submit" />
+    </form>
+    
+    <script>
+        function main () {
+            parserCSS(document.getElementById('text').value);
+        }
+    </script>
+</body>
+</html>
