@@ -24,7 +24,6 @@ var parserCSS;
             } else if (open < close) {
                 depth++;
                 pos = close;
-                //continue;
             } else {
                 depth--;
             }
@@ -32,10 +31,6 @@ var parserCSS;
             if (depth <= 0) {
                 break;
             }
-            if (depth > 10) { //temp infinite loop fix
-                break;
-            }
-            //break;
         }
         return close; //closing barcket position
     }
