@@ -48,6 +48,24 @@ var parserCSS;
         return {media: media, innerCSSText: inner, beginning: position, 'open': start, 'close': close};
     }
     
+    function seperateProperties(properties) {
+        var p;
+        var prop = properties.split(';');
+        //console.log(properties);
+        //console.log(prop);
+        var result = [];
+        for (p = 0; p < prop.length; p++) {
+            if (prop[p].length !== 0) {
+                var colon = prop[p].indexOf(':');
+                result.push({
+                    property: prop[p].substring(0, colon),
+                    value: prop[p].substring(colon + 1, prop[p].length)
+                });
+            }
+        }
+        return result;
+    }
+    
     function extractInnerCSS(innerCSSText) {
         var selectorArray = [], location, prevClose = 0;
         //console.log(innerCSSText);
@@ -59,10 +77,11 @@ var parserCSS;
                 selector: innerCSSText.substring(prevClose + 1, location).trim(),
                 innerCSS: innerCSSText.substring(location + 1, close).trim()
             };
+            obj.innerCSS = seperateProperties(obj.innerCSS);
             prevClose = close;
             selectorArray.push(obj);
             location = innerCSSText.indexOf('{', location + 1);
-            console.log('location: ' + location);
+            //console.log('location: ' + location);
         }
         
         return selectorArray;
@@ -76,17 +95,20 @@ var parserCSS;
         var location = 0, count = 0;
         var string = String(text);
         var letter = string.charAt(string.indexOf('@') + 1);
-        
+        var prevLocation = 0;
         location = string.indexOf('@');
         while (location !== -1) {
             letter = string.charAt(location + 1);
             
             console.log("letter: " + letter);
             
-            if (letter === 'm' || letter === 'M') {
+            /*if (location > prevLocation) {
+                array.push(string.substring(prevLocation, string.indexOf('@', location + 1)));
+            } else */if (letter === 'm' || letter === 'M') {
                 console.log('m' + letter);
                 var media = extractMediaQuery(string, location);
                 media.innerCSS = extractInnerCSS(media.innerCSSText);
+                prevLocation = media.close;
                 array.push(media);
                 count++;
             }
