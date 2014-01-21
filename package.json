@@ -1,6 +1,13 @@
 {
   "name": "CSS-Diff",
   "version": "0.0.4",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/imamathwiz/css-diff"
+  },
+  "bugs": {
+      "url": "https://github.com/imamathwiz/css-diff/issues"
+  }
   "devDependencies": {
     "grunt": "~0.4.2",
     "grunt-jslint": "~1.1.2",
