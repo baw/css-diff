@@ -3,7 +3,7 @@
   "version": "0.0.4",
   "repository": {
     "type": "git",
-    "url": "git://github.com/imamathwiz/css-diff"
+    "url": "http://github.com/imamathwiz/css-diff.git"
   },
   "bugs": {
     "url": "https://github.com/imamathwiz/css-diff/issues"
