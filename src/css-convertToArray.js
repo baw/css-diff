@@ -5,7 +5,7 @@
     © 2014 Brian Weiser. All rights reserved.
 */
 
-var parserCSS;
+var converToArray;
 
 (function () {
     var array = [];
@@ -87,7 +87,7 @@ var parserCSS;
         return selectorArray;
     }
     
-    parserCSS = function (text) {
+    converToArray = function (text) {
         console.clear();
         console.log(text);
         text = text.replace(/(^[ \t]*\n)/gm, ""); // slight minification

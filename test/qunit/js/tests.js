@@ -1,5 +1,5 @@
 /*global test, parserCSS, ok */
 
 test("hello test", function () {
-    ok(typeof parserCSS === 'function', "parserCSS is a function");
+    ok(typeof converToArray === 'function', "parserCSS is a function");
 });
