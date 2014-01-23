@@ -115,5 +115,6 @@ var convertToArray;
             location = string.indexOf('@', location + 1);
         }
         console.log(array);
+        return array;
     };
 })();
