@@ -88,7 +88,6 @@ var converToArray;
     }
     
     converToArray = function (text) {
-        console.clear();
         console.log(text);
         text = text.replace(/(^[ \t]*\n)/gm, ""); // slight minification
         console.log(text);
