@@ -1,8 +1,9 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <script src="../src/css-parser.js"></script>
-    <script src="../src/css-compare.js"></script>
+    <script src="../src/css-convertToArray.js"></script>
+    <script src="../src/css-applyArray.js"></script>
+    <script src="../src/css-compareOutput.js"></script>
 </head>
 <body>
     
@@ -13,7 +14,7 @@
     
     <script>
         function main () {
-            parserCSS(document.getElementById('text').value);
+            convertToArray(document.getElementById('text').value);
         }
     </script>
 </body>
