@@ -1,12 +1,12 @@
 /*jslint vars:true */
-/*global test, converToArray, ok */
+/*global test, convertToArray, ok */
 
 test("function test", function () {
     'use strict';
     ok(typeof convertToArray === 'function', "convertToArray is a function");
 });
 
-/* jQuery UI used for testing */
+/* Gridlock UI used for testing */
 test("Media query test", function () {
     'use strict';
     
