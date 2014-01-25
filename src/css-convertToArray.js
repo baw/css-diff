@@ -100,8 +100,11 @@ var convertToArray;
             if (location > prevLocation + 1) {
                 if (isMedia) {
                     // push everything between either the two media queries or from the start
-                    array.push(string.substring((prevLocation === 0) ? prevLocation : prevLocation + 1, location));
-                    
+                    array.push({
+                        innerCSSText : string.substring((prevLocation === 0) ? prevLocation : prevLocation + 1, location),
+                        beginning: (prevLocation === 0) ? prevLocation : prevLocation + 1,
+                        close: location
+                    });
                     //push media query
                     media = extractMediaQuery(string, location);
                     media.innerCSS = extractInnerCSS(media.innerCSSText);
