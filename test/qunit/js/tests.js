@@ -15,7 +15,7 @@ test("Media query test", function () {
     cssArray = convertToArray(cssString);
     length = 0;
     for (m = 0; m < cssArray.length; m++) {
-        if (cssArray[m].media.substring(0, 6) === "@media") {
+        if (cssArray[m].media !== undefined && cssArray[m].media.substring(0, 6) === "@media") {
             length++;
         }
     }

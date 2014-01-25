@@ -88,31 +88,38 @@ var convertToArray;
     }
     
     convertToArray = function (text) {
-        console.log(text);
         text = text.replace(/(^[ \t]*\n)/gm, ""); // slight minification
-        console.log(text);
-        var location = 0, count = 0;
+        var location = 0, count = 0, newLocation, media;
         var string = String(text);
         var letter = string.charAt(string.indexOf('@') + 1);
         var prevLocation = 0;
-        location = string.indexOf('@');
+        location = string.toLowerCase().indexOf('@media');
         while (location !== -1) {
-            letter = string.charAt(location + 1);
+            var isMedia = string.substring(location + 1, (location + "media".length + 1)).toLowerCase() === "media";
             
-            console.log("letter: " + letter);
-            
-            /*if (location > prevLocation) {
-                array.push(string.substring(prevLocation, string.indexOf('@', location + 1)));
-            } else */if (letter === 'm' || letter === 'M') {
-                console.log('m' + letter);
-                var media = extractMediaQuery(string, location);
+            if (location > prevLocation + 1) {
+                if (isMedia) {
+                    // push everything between either the two media queries or from the start
+                    array.push(string.substring((prevLocation === 0) ? prevLocation : prevLocation + 1, location));
+                    
+                    //push media query
+                    media = extractMediaQuery(string, location);
+                    media.innerCSS = extractInnerCSS(media.innerCSSText);
+                    prevLocation = media.close;
+                    array.push(media);
+                    
+                    //keep count of number of media queries...
+                    count++;
+                }
+            } else if (isMedia) {
+                media = extractMediaQuery(string, location);
                 media.innerCSS = extractInnerCSS(media.innerCSSText);
                 prevLocation = media.close;
                 array.push(media);
                 count++;
             }
             
-            location = string.indexOf('@', location + 1);
+            location = string.toLowerCase().indexOf('@', location + 1);
         }
         console.log(array);
         return array;
