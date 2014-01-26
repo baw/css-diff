@@ -1,7 +1,7 @@
 /*jslint browser: true, vars: true, plusplus:true */
 /*global console */
 /*
-    ParserCSS
+    convertToArray.js
     © 2014 Brian Weiser. All rights reserved.
 */
 
@@ -127,4 +127,4 @@ var convertToArray;
         console.log(array);
         return array;
     };
-})();
+}());
