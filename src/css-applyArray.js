@@ -6,6 +6,6 @@
 var applyArray;
 (function () {
     applyArray = function (cssArray) {
-        cssArray;
+        
     };
 }());
