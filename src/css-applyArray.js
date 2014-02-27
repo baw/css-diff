@@ -9,15 +9,15 @@ var applyArray;
     
     var processMediaQuery = function (cssArray) {
         
-    }
+    };
     
     applyArray = function (cssArray) {
         var mediaArray = [];
-        for (var i = 0; i < cssArray.length; i++) {
+        for (var c = 0; i < cssArray.length; c++) {
             
         }
         
-        for (var i = 0; i < mediaArray.length; i++) {
+        for (var m = 0; i < mediaArray.length; m++) {
             
         }
     };
