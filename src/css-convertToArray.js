@@ -74,11 +74,11 @@ var convertToArray;
         while (location !== -1) {
             var close = findClosingBracket(innerCSSText, location);
             var obj = {
-                selector: innerCSSText.substring(prevClose + 1, location).trim(),
+                selector: innerCSSText.substring(prevClose, location).trim(),
                 innerCSS: innerCSSText.substring(location + 1, close).trim()
             };
             obj.innerCSS = seperateProperties(obj.innerCSS);
-            prevClose = close;
+            prevClose = close + 1;
             selectorArray.push(obj);
             location = innerCSSText.indexOf('{', location + 1);
             //console.log('location: ' + location);
@@ -100,16 +100,21 @@ var convertToArray;
             if (location > prevLocation + 1) {
                 if (isMedia) {
                     // push everything between either the two media queries or from the start
-                    array.push({
-                        innerCSSText : string.substring((prevLocation === 0) ? prevLocation : prevLocation + 1, location),
-                        beginning: (prevLocation === 0) ? prevLocation : prevLocation + 1,
-                        close: location
-                    });
-                    //push media query
-                    media = extractMediaQuery(string, location);
-                    media.innerCSS = extractInnerCSS(media.innerCSSText);
+                    var innerCSSText = string.substring((prevLocation === 0) ? prevLocation : prevLocation + 1, location)
+                    innerCSSText = innerCSSText.trim();
+                    if (innerCSSText.length > 0) {
+                        array.push({
+                            innerCSSText : innerCSSText,
+                            beginning: (prevLocation === 0) ? prevLocation : prevLocation + 1,
+                            close: location
+                        });
+
+                        //push media query
+                        media = extractMediaQuery(string, location);
+                        media.innerCSS = extractInnerCSS(media.innerCSSText);
+                        array.push(media);
+                    }
                     prevLocation = media.close;
-                    array.push(media);
                     
                     //keep count of number of media queries...
                     count++;
