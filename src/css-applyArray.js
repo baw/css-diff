@@ -5,7 +5,20 @@
 
 var applyArray;
 (function () {
-    applyArray = function (cssArray) {
+    
+    
+    var processMediaQuery = function (cssArray) {
         
+    }
+    
+    applyArray = function (cssArray) {
+        var mediaArray = [];
+        for (var i = 0; i < cssArray.length; i++) {
+            
+        }
+        
+        for (var i = 0; i < mediaArray.length; i++) {
+            
+        }
     };
 }());
