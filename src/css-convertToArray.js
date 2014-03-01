@@ -18,7 +18,6 @@ var convertToArray;
         while (true) {
             open = text.indexOf('{', pos + 1);
             close = text.indexOf('}', pos + 1);
-            //console.log({open: open, close: close});
             if (open === -1 || close === -1) {
                 break;
             } else if (open < close) {
@@ -27,7 +26,6 @@ var convertToArray;
             } else {
                 depth--;
             }
-            //console.log('depth: ' + depth);
             if (depth <= 0) {
                 break;
             }
@@ -43,7 +41,6 @@ var convertToArray;
         
         var close = findClosingBracket(text, start);
         
-        //console.log('close: ' + close);
         inner = text.substring(start + 1, close).trim();
         return {media: media, innerCSSText: inner, beginning: position, 'open': start, 'close': close};
     }
@@ -51,8 +48,6 @@ var convertToArray;
     function seperateProperties(properties) {
         var p;
         var prop = properties.split(';');
-        //console.log(properties);
-        //console.log(prop);
         var result = [];
         for (p = 0; p < prop.length; p++) {
             if (prop[p].length !== 0) {
@@ -68,7 +63,6 @@ var convertToArray;
     
     function extractInnerCSS(innerCSSText) {
         var selectorArray = [], location, prevClose = 0;
-        //console.log(innerCSSText);
         
         location = innerCSSText.indexOf('{');
         while (location !== -1) {
@@ -81,7 +75,6 @@ var convertToArray;
             prevClose = close + 1;
             selectorArray.push(obj);
             location = innerCSSText.indexOf('{', location + 1);
-            //console.log('location: ' + location);
         }
         
         return selectorArray;
@@ -129,7 +122,6 @@ var convertToArray;
             
             location = string.toLowerCase().indexOf('@', location + 1);
         }
-        console.log(array);
         return array;
     };
 }());
