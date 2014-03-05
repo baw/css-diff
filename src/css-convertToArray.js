@@ -42,7 +42,7 @@ var convertToArray;
         var close = findClosingBracket(text, start);
         
         inner = text.substring(start + 1, close).trim();
-        return {media: media, innerCSSText: inner, beginning: position, 'open': start, 'close': close};
+        return {media: media, innerCSSText: inner, beginning: position, 'start': start, 'end': close};
     }
     
     function seperateProperties(properties) {
@@ -99,26 +99,32 @@ var convertToArray;
                         array.push({
                             innerCSSText : innerCSSText,
                             beginning: (prevLocation === 0) ? prevLocation : prevLocation + 1,
-                            close: location
-                        });
+                            end: location,
+                            innerCSS: extractInnerCSS(innerCSSText)
+                        });//temporary fix
 
                         //push media query
                         media = extractMediaQuery(string, location);
-                        media.innerCSS = extractInnerCSS(media.innerCSSText);
+                        var css = extractInnerCSS(media.innerCSSText);
+                        console.log(css);
+                        media.innerCSS = css;
                         array.push(media);
                     }
-                    prevLocation = media.close;
+                    prevLocation = media.end;
                     
                     //keep count of number of media queries...
                     count++;
                 }
-            } else if (isMedia) {
+            } /*else if (isMedia) {
+                console.log('else');
                 media = extractMediaQuery(string, location);
-                media.innerCSS = extractInnerCSS(media.innerCSSText);
+                var css = extractInnerCSS(media.innerCSSText);
+                console.log(css);
+                media.innerCSS = css;
                 prevLocation = media.close;
                 array.push(media);
                 count++;
-            }
+            }*/
             
             location = string.toLowerCase().indexOf('@', location + 1);
         }
