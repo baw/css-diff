@@ -8,7 +8,7 @@
 var convertToArray;
 
 (function () {
-    var array = [];
+    var array;
     /*
         @variabe text the text to be searched within
         @variable pos the starting position for the search
@@ -35,14 +35,14 @@ var convertToArray;
     
     function extractMediaQuery(text, position) {
         var media, inner = '';
-        var start = text.indexOf('{', position);
+        var start = text.indexOf('{');
         
-        media = text.substring(position, start).trim();
+        media = text.substring(0, start).trim();
         
         var close = findClosingBracket(text, start);
         
         inner = text.substring(start + 1, close).trim();
-        return {media: media, innerCSSText: inner, beginning: position, 'start': start, 'end': close};
+        return {"media": media, innerCSSText: inner, beginning: position, 'start': start, 'end': close};
     }
     
     function seperateProperties(properties) {
@@ -52,9 +52,18 @@ var convertToArray;
         for (p = 0; p < prop.length; p++) {
             if (prop[p].length !== 0) {
                 var colon = prop[p].indexOf(':');
+                var property = prop[p].substring(0, colon);
+                var value = prop[p].substring(colon + 1, prop[p].length);
+                var important = false;
+                if (value.indexOf("!important") !== -1) {
+                    value = (value.substring(0, value.indexOf("!important"))).trim();
+                    important = true;
+                }
+                
                 result.push({
-                    property: prop[p].substring(0, colon),
-                    value: prop[p].substring(colon + 1, prop[p].length)
+                    property: property,
+                    value: value,
+                    isImportant: important
                 });
             }
         }
@@ -81,52 +90,59 @@ var convertToArray;
     }
     
     convertToArray = function (text) {
-        text = text.replace(/(^[ \t]*\n)/gm, ""); // slight minification
-        var location = 0, count = 0, newLocation, media;
+        array = [];
+        var location = 0, count = 0, /*newLocation, */media, innerCSSText, closingBracket, openingBracket;
         var string = String(text);
-        var letter = string.charAt(string.indexOf('@') + 1);
-        var prevLocation = 0;
+        var prevLocation = 0, prevClose = 0;
         location = string.toLowerCase().indexOf('@media');
         while (location !== -1) {
-            var isMedia = string.substring(location + 1, (location + "media".length + 1)).toLowerCase() === "media";
+            // push everything between either the two media queries or from the start
+            var textBetweenMedias = string.substring((prevClose === 0) ? prevClose : prevClose + 1, location);
+            textBetweenMedias = textBetweenMedias.trim();
+            if (textBetweenMedias.length > 0) {
+                array.push({
+                    innerCSSText : textBetweenMedias,
+                    beginning: (prevClose === 0) ? prevClose : prevClose + 1,
+                    end: (location - 1),
+                    innerCSS: extractInnerCSS(textBetweenMedias)
+                });
+            }
+            openingBracket = string.indexOf('{', location);
+            closingBracket = findClosingBracket(string, openingBracket);
             
-            if (location > prevLocation + 1) {
-                if (isMedia) {
-                    // push everything between either the two media queries or from the start
-                    var innerCSSText = string.substring((prevLocation === 0) ? prevLocation : prevLocation + 1, location);
-                    innerCSSText = innerCSSText.trim();
-                    if (innerCSSText.length > 0) {
-                        array.push({
-                            innerCSSText : innerCSSText,
-                            beginning: (prevLocation === 0) ? prevLocation : prevLocation + 1,
-                            end: location,
-                            innerCSS: extractInnerCSS(innerCSSText)
-                        });//temporary fix
-
-                        //push media query
-                        media = extractMediaQuery(string, location);
-                        var css = extractInnerCSS(media.innerCSSText);
-                        console.log(css);
-                        media.innerCSS = css;
-                        array.push(media);
-                    }
-                    prevLocation = media.end;
-                    
-                    //keep count of number of media queries...
-                    count++;
-                }
-            } /*else if (isMedia) {
-                console.log('else');
-                media = extractMediaQuery(string, location);
-                var css = extractInnerCSS(media.innerCSSText);
-                console.log(css);
-                media.innerCSS = css;
-                prevLocation = media.close;
+            //adding the next media query
+            innerCSSText = string.substring((openingBracket === 0) ? openingBracket : openingBracket + 1, closingBracket);
+            innerCSSText = innerCSSText.trim();
+            if (innerCSSText.length > 0) {
+                media = {
+                    "media": string.substring(location, openingBracket).trim(),
+                    "innerCSSText": innerCSSText,
+                    "beginning": location,
+                    "openingBracket": openingBracket,
+                    "end": closingBracket,
+                    "innerCSS": extractInnerCSS(innerCSSText)
+                };
+                
                 array.push(media);
-                count++;
-            }*/
+            }
+            prevLocation = location;
+            prevClose= closingBracket;
+            //keeps count of number of media queries
+            count++;
             
-            location = string.toLowerCase().indexOf('@', location + 1);
+            location = string.toLowerCase().indexOf('@media', location + 1);
+        }
+        
+        //adds the last part of the css file
+        innerCSSText = string.substring(closingBracket + 1);
+        innerCSSText = innerCSSText.trim();
+        if (innerCSSText.length > 0) {
+            array.push({
+                "innerCSSText": innerCSSText,
+                "beginning": closingBracket + 1,
+                "end": string.length,
+                "innerCSS": extractInnerCSS(innerCSSText)
+            });
         }
         return array;
     };
